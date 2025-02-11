@@ -6,20 +6,21 @@ variables:
   PYTHON_VERSION: "3.10"
 
 before_script:
-  - apt-get update
-  - apt-get install -y python3 python3-venv python3-pip
+  - apt-get update && apt-get install -y python3 python3-venv python3-pip
   - python3 -m venv venv
   - source venv/bin/activate
-  - pip install -r requirements.txt
+  - python3 -m pip install --upgrade pip
+  - python3 -m pip install -r requirements.txt flake8 pytest
 
 linting:
   stage: lint
   script:
-    - pip install flake8
+    - source venv/bin/activate
     - flake8 --max-line-length=88 functions.py tests/test_functions.py
 
 unit_tests:
   stage: test
   script:
-    - pip install pytest
+    - source venv/bin/activate
+    - export PYTHONPATH=$(pwd)
     - pytest tests/
