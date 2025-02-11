@@ -20,10 +20,10 @@ class TestBars(unittest.TestCase):
         mock_read_pickle.return_value = mock_df
 
         # Create Bars instance
-        bars = Bars(ticker='BTC', minutes=1440, days=3)
+        bars = Bars(ticker='BTC',)
 
         # Run getbars method
-        result = bars.get_bars()
+        result = bars.get_bars(minutes=1400, days=3)
 
         # Assertions to check the correctness
         self.assertIsInstance(result, pd.DataFrame)
@@ -32,11 +32,11 @@ class TestBars(unittest.TestCase):
         self.assertEqual(result.iloc[-1]['volume'], 1400)  # check if charges values correctly
 
     @patch('pandas.read_pickle', side_effect=FileNotFoundError("File not found"))
-    def test_get_bars_invalid_ticker(self):
+    def test_get_bars_invalid_ticker(self, mock_read_pickle):
         """Test get_bars() when an invalid ticker is passed"""
-        bars = Bars(ticker='INVALID_TICKER', minutes=1440, days=3)
+        bars = Bars(ticker='INVALID_TICKER')
         with self.assertRaises(ValueError) as context:
-            bars.get_bars()
+            bars.get_bars(minutes=1440, days=3)
 
         # Ensure correct error message is raised
         self.assertIn("File not found", str(context.exception))
@@ -44,18 +44,18 @@ class TestBars(unittest.TestCase):
     @patch('pandas.read_pickle', side_effect=OSError("OS error"))
     def test_get_bars_os_error(self, mock_read_pickle):
         """Test get_bars() when an OS error occurs"""
-        bars = Bars(ticker='AAPL', minutes=1440, days=3)
+        bars = Bars(ticker='BTC')
         with self.assertRaises(ValueError) as context:
-            bars.get_bars()
+            bars.get_bars(minutes=1440, days=3)
 
         self.assertIn("OS error", str(context.exception))
 
     @patch('pandas.read_pickle', side_effect=Exception("Unknown error"))
     def test_get_bars_generic_error(self, mock_read_pickle):
         """Test get_bars() when an unexpected error occurs"""
-        bars = Bars(ticker='AAPL', minutes=1440, days=3)
+        bars = Bars(ticker='BTCUSDT')
         with self.assertRaises(ValueError) as context:
-            bars.get_bars()
+            bars.get_bars(minutes=1440, days=3)
 
         self.assertIn("Unknown error", str(context.exception))
 
