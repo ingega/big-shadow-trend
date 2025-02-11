@@ -16,7 +16,7 @@ linting:
   stage: lint
   script:
     - pip install flake8
-    - flake8 --max-line-length=79 functions.py test_functions.py
+    - flake8 --max-line-length=88 functions.py test_functions.py
 
 unit_tests:
   stage: test
