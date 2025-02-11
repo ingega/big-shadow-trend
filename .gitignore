@@ -1,0 +1,24 @@
+# py files, by the moment only some ones gonna be added
+bt.py
+decorators.py
+main.py
+offline.py
+
+# png, and others
+flow-diagram.png
+pseudocode.md
+road_map.pdf
+log.docx
+
+# anothers files
+tickers.csv
+
+
+# sensitive info
+key.py
+
+
+# system files
+.idea/
+__pycache__/
+~$log.docx
