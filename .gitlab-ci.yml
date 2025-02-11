@@ -1,0 +1,23 @@
+stages:
+  - lint
+  - test
+
+variables:
+  PYTHON_VERSION: "3.10"
+
+before_script:
+  - python -m venv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
+
+linting:
+  stage: lint
+  script:
+    - pip install flake8
+    - flake8 --max-line-length=88 .
+
+unit_tests:
+  stage: test
+  script:
+    - pip install pytest
+    - pytest tests/
