@@ -27,9 +27,12 @@ class TestBars(unittest.TestCase):
 
         # Assertions to check the correctness
         self.assertIsInstance(result, pd.DataFrame)
-        self.assertEqual(len(result), 3)  # Check if slicing works correctly
-        self.assertEqual(result.iloc[0]['open'], 102)  # Check data conversion
-        self.assertEqual(result.iloc[-1]['volume'], 1400)  # check if charges values correctly
+        # Check if slicing works correctly
+        self.assertEqual(len(result), 3)
+        # Check data conversion
+        self.assertEqual(result.iloc[0]['open'], 102)
+        # check if charges values correctly
+        self.assertEqual(result.iloc[-1]['volume'], 1400)
 
     @patch('pandas.read_pickle', side_effect=FileNotFoundError("File not found"))
     def test_get_bars_invalid_ticker(self, mock_read_pickle):
