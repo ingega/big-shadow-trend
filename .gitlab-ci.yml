@@ -22,5 +22,6 @@ unit_tests:
   stage: test
   script:
     - source venv/bin/activate
+    - mkdir -p bars  # this directory is needed to pass the test
     - export PYTHONPATH=$(pwd)
     - pytest tests/
