@@ -27,14 +27,27 @@ deploy_to_github:
   only: 
     - production
   script:
-    - git fetch --unshallow || true
-    - rm -rf tests/ .gitignore requeriments.txt .gitlab-ci.yml
+    # Ensure full Git history before checking out
+    - git fetch --prune --unshallow || true
+
+    # change to production, no changes are commited yet
+    - git checkout production
+
+    # remove unnecessary files
+    - rm -rf tests/ .gitignore requirements.txt .gitlab-ci.yml
+
+    # Configure Git identity
     - git config --global user.email "ci@gitlab.com"
     - git config --global user.name "GitLab CI"
-    - git checkout production
-    # remove unnecesarie files from production --> main
+
+    # Ensure changes are committed safely
     - |
       git add -A
-      git commit -m 'chore: remove unnecesarie files'
-    - git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/ingega/big-shadow-trend.git || git remote set-url github  https://oauth2:${GITHUB_TOKEN}@github.com/ingega/big-shadow-trend.git
+      git diff --cached --exit-code || git commit -m 'chore: remove unnecessary files'
+
+    # Ensure remote URL is always set correctly
+    - git remote set-url github https://oauth2:${GITHUB_TOKEN}@github.com/ingega/big-shadow-trend.git
+
+    # Force push production → GitHub main
     - git push github production:main --force
+
