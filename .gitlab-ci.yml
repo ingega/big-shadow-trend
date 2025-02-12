@@ -49,7 +49,8 @@ deploy_to_github:
     - |
       git diff --staged --quiet || git commit -m 'chore: remove unnecessary files'
 
-    # ✅ Ensure remote URL is always set correctly
+    # ✅ Ensure GitHub remote exists before setting the URL
+    - if ! git remote get-url github >/dev/null 2>&1; then git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/ingega/big-shadow-trend.git; fi
     - git remote set-url github https://oauth2:${GITHUB_TOKEN}@github.com/ingega/big-shadow-trend.git
 
     # ✅ Push production → GitHub main (cleanly)
