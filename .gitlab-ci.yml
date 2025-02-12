@@ -32,4 +32,5 @@ deploy_to_github:
     - git config --global user.name "GitLab CI"
     - git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/ingega/big-shadow-trend.git || git remote set-url github  https://oauth2:${GITHUB_TOKEN}@github.com/ingega/big-shadow-trend.git
     - git checkout production
-    - git push github production:main
+    - git fetch github main
+    - git push github production:main --force
