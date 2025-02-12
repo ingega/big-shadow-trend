@@ -2,7 +2,8 @@ from functions import Bars
 import unittest
 from unittest.mock import patch
 import pandas as pd
-from pathlib import Path
+# Path is used in decrator patch, but not is visible
+from pathlib import Path  # noqa: F401
 
 
 class TestBars(unittest.TestCase):
@@ -31,10 +32,12 @@ class TestBars(unittest.TestCase):
         self.assertIsInstance(result, pd.DataFrame)
         self.assertEqual(len(result), 3)  # Check slicing
         self.assertEqual(result.iloc[0]['open'], 102)  # Check conversion
-        self.assertEqual(result.iloc[-1]['volume'], 1400)  # Check correct data load
+        # Check correct data load
+        self.assertEqual(result.iloc[-1]['volume'], 1400)
 
     @patch('pathlib.Path.exists', return_value=True)
-    @patch('pandas.read_pickle', side_effect=FileNotFoundError("File not found"))
+    @patch('pandas.read_pickle',
+           side_effect=FileNotFoundError("File not found"))
     def test_get_bars_invalid_ticker(self, mock_read_pickle, mock_path_exists):
         """Test get_bars() when an invalid ticker is passed"""
         bars = Bars(ticker='INVALID_TICKER')
