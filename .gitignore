@@ -22,3 +22,6 @@ key.py
 .idea/
 __pycache__/
 ~$log.docx
+
+# unnecesarie folders
+project/
