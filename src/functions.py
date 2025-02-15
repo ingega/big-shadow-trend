@@ -27,7 +27,7 @@ class Bars:
         script_path = Path(__file__).resolve()
 
         # Find the root directory (parent of the system folder)
-        root_dir = script_path.parent.parent
+        root_dir = script_path.parent.parent.parent
 
         # Construct the bars folder path dynamically
         bars_dir = root_dir / "bars"
