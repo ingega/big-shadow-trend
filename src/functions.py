@@ -93,6 +93,10 @@ class Filter:
         """
         df = self.bars.get_bars(self.minutes, self.days)
 
+        # index control is necessary for further ops
+        df = df.reset_index(drop=True)
+        df['index'] = df.index
+
         # ✅ Compute necessary values for filtering
         df["body_size"] = abs(df["open"] - df["close"]) / df["open"]
         # using numpy is faster
@@ -127,4 +131,4 @@ class Filter:
             & (df['body_size'] < self.params['body'])
             ]
 
-        return filtered_df
+        return filtered_df.to_dict(orient='records')
