@@ -15,7 +15,7 @@ before_script:
 linting:
   stage: lint
   script:
-    - venv/bin/python3 -m flake8 --max-line-length=88 functions.py tests/test_functions.py
+    - venv/bin/python3 -m flake8 --max-line-length=88 src/functions.py tests/test_functions.py
 
 unit_tests:
   stage: test
