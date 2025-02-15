@@ -1,8 +1,8 @@
-from functions import Bars
+from src.functions import Bars, Filter
 import unittest
 from unittest.mock import patch
 import pandas as pd
-# Path is used in decrator patch, but not is visible
+# Path is used in decorator patch, but not is visible
 from pathlib import Path  # noqa: F401
 
 
@@ -65,6 +65,64 @@ class TestBars(unittest.TestCase):
             bars.get_bars(minutes=1440, days=3)
 
         self.assertIn("Unknown error", str(context.exception))
+
+
+class TestFilter(unittest.TestCase):
+    @patch.object(Bars, "get_bars")
+    def test_apply_filter_valid_entry(self, mock_get_bars):
+        """
+        Test apply_filter() when a valid entry condition exists
+        :return
+            1 case in uptrend, and 1 in downtrend
+        """
+        # ✅ Mock DataFrame with two valid trade signal
+        sample_data = pd.DataFrame({
+            'open': [100, 102, 101, 100],  # body_size = 0.004
+            'high': [110, 108, 101.4, 99],  # shadow_up = 0.1
+            'low': [95, 99, 97, 96],  # shadow_down = 0.04
+            'close': [100.4, 106, 100.6, 99.5],  # Both bars same color
+        })
+        mock_get_bars.return_value = sample_data
+
+        # ✅ Create Bars instance (Mocked)
+        bars = Bars(ticker="BTCUSDT")
+
+        # ✅ Initialize Filter with sample conditions
+        filter_obj = Filter(bars, minutes=1, days=1, shadow=0.02, body=0.01)
+
+        # ✅ Apply the filter
+        result = filter_obj.apply_filter()
+
+        # ✅ Assertions: Should return 1 row
+        self.assertEqual(len(result), 1)
+
+    @patch.object(Bars, "get_bars")
+    def test_apply_filter_empty_entry(self, mock_get_bars):
+        """
+        Test apply_filter() when a valid entry condition exists
+        :return
+            1 case in uptrend, and 1 in downtrend
+        """
+        # ✅ Mock DataFrame with two valid trade signal
+        sample_data = pd.DataFrame({
+            'open': [100, 102, 101, 100],  # body_size = 0.05
+            'high': [110, 108, 101.4, 99],  # shadow_up = 0.1
+            'low': [95, 99, 97, 96],  # shadow_down = 0.04
+            'close': [105, 106, 96, 99.5],  # Both bars same color
+        })
+        mock_get_bars.return_value = sample_data
+
+        # ✅ Create Bars instance (Mocked)
+        bars = Bars(ticker="BTCUSDT")
+
+        # ✅ Initialize Filter with sample conditions
+        filter_obj = Filter(bars, minutes=1, days=1, shadow=0.02, body=0.01)
+
+        # ✅ Apply the filter
+        result = filter_obj.apply_filter()
+
+        # ✅ Assertions: Should return 1 row
+        self.assertEqual(len(result), 0)
 
 
 if __name__ == '__main__':
