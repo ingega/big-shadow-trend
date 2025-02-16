@@ -143,6 +143,7 @@ class Filter:
 
         return filtered_df.to_dict(orient='records')
 
+
 class Tickers:
     """
     Return a list of tickers, saved in csv
