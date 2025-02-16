@@ -114,7 +114,7 @@ class Filter:
         df["next_bar_side"] = df["side"].shift(-1)
 
         # Apply conditions from kwargs
-        filtered_df = df.loc[
+        filtered_indices = df.loc[
             (
                     (
                             (df['side'] == 'BUY')
@@ -125,10 +125,25 @@ class Filter:
                     (
                             (df['side'] == 'SELL')
                             & (df['lower_shadow'] > self.params['shadow'])
-                            & (df['next_bar_side'] == 'red')
+                            & (df['next_bar_side'] == 'SELL')
                     )
             )
             & (df['body_size'] < self.params['body'])
-            ]
+            # the correct values is the "next roW" due to the strategy evaluates
+            # that the next bar is same side that the original one
+            ].index
+        # Get the next row for each filtered index
+        next_indices = filtered_indices + 1
+
+        # Ensure we don't go out of bounds
+        next_indices = next_indices[next_indices < len(df)]
+
+        # Return the next rows
+        filtered_df = df.iloc[next_indices]
 
         return filtered_df.to_dict(orient='records')
+
+class Tickers:
+    """
+    Return a list of tickers, saved in csv
+    """
