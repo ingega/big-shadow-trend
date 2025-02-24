@@ -9,6 +9,7 @@ flow-diagram.png
 pseudocode.md
 road_map.pdf
 log.docx
+records-xlsx
 
 # anothers files
 tickers.csv
@@ -25,3 +26,6 @@ __pycache__/
 
 # unnecesarie folders
 project/
+
+# tools files
+qodana.yaml
