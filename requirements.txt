@@ -1,2 +1,3 @@
 pandas
 unittest2
+numpy

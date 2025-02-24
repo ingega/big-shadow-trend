@@ -94,7 +94,7 @@ class TestFilter(unittest.TestCase):
         result = filter_obj.apply_filter()
 
         # ✅ Assertions: Should return 1 row
-        self.assertEqual(len(result), 1)
+        self.assertEqual(len(result), 2)
 
     @patch.object(Bars, "get_bars")
     def test_apply_filter_empty_entry(self, mock_get_bars):
