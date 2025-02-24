@@ -1,14 +1,5 @@
 import pandas as pd
 from pathlib import Path
-# import numpy as np
-# from decorators import timer
-# import time
-
-
-ticks = [["ETHUSDT", 2], ["BATUSDT", 4], ["MKRUSDT", 1], ["FLMUSDT", 4],
-         ["ANKRUSDT", 5], ["MTLUSDT", 4], ["CTSIUSDT", 4],
-         ["1000LUNCUSDT", 7], ["CFXUSDT", 7], ["XVSUSDT", 6]
-         ]
 
 
 class Bars:
@@ -102,7 +93,7 @@ class Filter:
         # using numpy is faster
         df["side"] = ["BUY" if c > o else "SELL"
                       for c, o in zip(df["close"], df["open"])]
-        # 🧿 we can define uper_shadow, by one side,
+        # 🧿 we can define upper_shadow, by one side,
         # 🧿 and then update the other one
         df["upper_shadow"] = (df["high"] - df["close"]) / df["close"]
         df.loc[df["side"] == "SELL", "upper_shadow"] \
@@ -129,8 +120,10 @@ class Filter:
                     )
             )
             & (df['body_size'] < self.params['body'])
-            # the correct values is the "next roW" due to the strategy evaluates
-            # that the next bar is same side that the original one
+            # the correct values is the "next roW" due to
+            # the strategy evaluates
+            # that the next bar is same side that
+            # the original one
             ].index
         # Get the next row for each filtered index
         next_indices = filtered_indices + 1
@@ -142,9 +135,3 @@ class Filter:
         filtered_df = df.iloc[next_indices]
 
         return filtered_df.to_dict(orient='records')
-
-
-class Tickers:
-    """
-    Return a list of tickers, saved in csv
-    """
